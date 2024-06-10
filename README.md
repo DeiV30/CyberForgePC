@@ -1,9 +1,11 @@
 # CyberForgePC
-## Reunión
+## Resumen
 En la planificación del proyecto se definen los roles especificos para cada uno de los intengrantes para llevar a cabo el desarrollo del proyecto
 
-## Reunión de Scrum
-[Definición de roles](https://drive.google.com/file/d/1yeX36YXNeOy1C9g-bRYfUC1BRD9O7jU5/view?usp=drive_link)
+## Daily (Scrum)
+![Alt text](https://i.ibb.co/BL6s7FX/Proyecto-ACA.png "a title")
 
+
+## Roles
 - Desarrollador backend : Donovan Avila Pardo
 - Scrum Master : Jose Luis Ramirez Vela
