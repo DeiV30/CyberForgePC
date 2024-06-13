@@ -10,3 +10,4 @@ En la planificación del proyecto se definen los roles especificos para cada uno
 - Desarrollador backend : Donovan Avila Pardo
 - Scrum Master : Jose Luis Ramirez Vela
 - Desarrollador Frontend : William Andres Salavarrieta Claros
+- Controladora de la base de datos: Karen Yiseth Alarcon Hernandez
