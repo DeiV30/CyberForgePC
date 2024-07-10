@@ -123,7 +123,7 @@
                         c.SwaggerDoc("v1",
                     new OpenApiInfo
                     {
-                        Title = "My API - V1",
+                        Title = "cyberforgepc Doc - V1",
                         Version = "v1"
                     }
                  );
