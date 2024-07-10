@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberforgePC - Venta de Periféricos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        #video-background {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -1;
+        }
+        header, nav, .container, footer {
+            position: relative;
+            z-index: 1; 
+        }
+        header {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+            position: relative;
+        }
+        .login-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #fff;
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+        }
+        .login-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        nav {
+            background-color: #444;
+            padding: 5px 0;
+            text-align: center;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+        }
+        nav a:hover {
+            background-color: #555;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; 
+            background-color: rgba(255, 255, 255, 0); 
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); 
+        }
+        .product {
+            text-align: center;
+            padding: 20px;
+            width: 40%; 
+            margin: 10px; 
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0); 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+        }
+        .product img {
+            width: 100%; 
+            height: auto;
+            border-radius: 5px;
+        }
+        .product h3 {
+            margin-top: 10px;
+        }
+        .product p {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+        .product a {
+            display: block;
+            padding: 10px 20px;
+            background-color: #8A2BE2; 
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .product a:hover {
+            background-color: #6A1B9A; 
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <video id="video-background" autoplay loop muted>
+        <source src="Videos\VideoFondo1.mp4" type="video/mp4">
+        Tu navegador no soporta video HTML5.
+    </video>
+
+    <header>
+        <h1>CyberforgePC</h1>
+        <a href="login.html" class="login-button">Login</a>
+        <p>Venta de Periféricos de Alta Calidad</p>
+    </header>
+    <nav>
+        <a href="Nosotros.html">Nosotros</a>
+        <a href="NuestrosProductos.html">Nuestros Productos</a>
+        <a href="Contactenos.html">Contactenos</a>
+    </nav>
+    <div class="container">
+        <div class="product">
+            <img src="Imagenes\TecladoOferta.jpg" alt="Teclado Gamer">
+            <h3>Teclado Gamer</h3>
+            <p>$99.990</p>
+            <a href="carrito.html">Agregar al carrito</a>
+        </div>
+        <div class="product">
+            <img src="Imagenes\MouseOferta.jpg" alt="Ratón Gamer">
+            <h3>Ratón Gamer</h3>
+            <p>$79.990</p>
+            <a href="carrito.html">Agregar al carrito</a>
+        </div>
+        <div class="product">
+            <img src="Imagenes\DiademaOferta.jpg" alt="Auriculares Gaming">
+            <h3>Auriculares Gaming</h3>
+            <p>$129.990</p>
+            <a href="carrito.html">Agregar al carrito</a>
+        </div>
+        <div class="product">
+            <img src="Imagenes\MousePad.jpg" alt="Mousepad Gamer">
+            <h3>Mousepad Gamer</h3>
+            <p>$19.990</p>
+            <a href="carrito.html">Agregar al carrito</a>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 CyberforgePC. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
