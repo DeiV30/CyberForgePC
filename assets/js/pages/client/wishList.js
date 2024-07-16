@@ -15,10 +15,13 @@ $(document).ready(function () {
         const wishlistList = $('#wishlist-list');
         wishlistList.empty();
 
-        wishlist.forEach(item => {
-            const productCard = `
+        if (wishlist.length === 0) {
+            wishlistList.append('<div class="w-100 d-flex justify-content-center"><span class="alert alert-light d-table">No tienes productos agregados a tu lista de deseos.</span></div>');
+        } else {
+            wishlist.forEach(item => {
+                const productCard = `
                 <div class="col mb-4">
-                    <div><a href="#"><img class="rounded img-fluid shadow w-100 fit-cover" src="${item.product.image}" style="height: 250px;"></a>
+                    <div><a href="/detail.html?item=${item.product.id}"><img class="rounded img-fluid shadow w-100 fit-cover" src="${item.product.image}" style="height: 250px;"></a>
                         <div class="py-4"><span class="badge bg-primary mb-2">${item.product.category.name}</span>
                             <h4 class="fw-bold">${item.product.name}</h4>
                             <p class="text-muted line-clamp">${item.product.description}</p>                                  
@@ -33,8 +36,10 @@ $(document).ready(function () {
                     </div>
                 </div>
                 `;
-            wishlistList.append(productCard);
-        });
+
+                wishlistList.append(productCard);
+            });
+        }
 
         $('.wishList-delete').on('click', function () {
             const wishListId = $(this).data('id');

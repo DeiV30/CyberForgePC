@@ -32,7 +32,7 @@ $(document).ready(function () {
 
             const productCard = `
                 <div class="col mb-4">          
-                     <a href="productDetail.html?item=${item.id}">          
+                     <a href="/detail.html?item=${item.id}">          
                     <div class="position-relative overflow-hidden">
                         <img class="rounded img-fluid shadow w-100 fit-cover" src="${item.image}" style="height: 250px;">
                         ${ribbon}
