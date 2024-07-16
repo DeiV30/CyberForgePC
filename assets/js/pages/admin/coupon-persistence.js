@@ -88,7 +88,7 @@ $(document).ready(function () {
                     confirmButtonText: 'OK'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = '/pages/coupon-list.html';
+                        window.location.href = '/admin/coupon-list.html';
                     }
                 });
             }).catch(function (error) {

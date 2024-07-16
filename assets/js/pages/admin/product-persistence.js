@@ -175,7 +175,7 @@ $(document).ready(function () {
                     }).then((result) => {
                         if (result.isConfirmed) {
 
-                            window.location.href = '/pages/products-list.html';
+                            window.location.href = '/admin/product-list.html';
                         }
                     });
                 }).catch(function (error) {

@@ -20,7 +20,7 @@ $(document).ready(function () {
                             <td>${item.id}</td>
                             <td>${item.name}</td>                            
                             <td>
-                                <div class="btn-group" role="group"><a class="btn btn-primary" href="categoryPersistence.html?item=${item.id}"><svg
+                                <div class="btn-group" role="group"><a class="btn btn-primary" href="category-persistence.html?item=${item.id}"><svg
                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor">
                                     <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
                                     <path

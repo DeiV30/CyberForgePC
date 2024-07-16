@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    let totalAmount = 0;
+
     function loadCartItems() {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
         const cartItemsContainer = $('#cart-items');
@@ -11,8 +13,6 @@ $(document).ready(function () {
             cartItemsContainer.append('<p>Tu carrito esta vacío.</p>');
             return;
         } else {
-            let totalAmount = 0;
-
             cart.forEach(item => {
                 totalAmount += item.price * item.quantity;
 
@@ -63,6 +63,11 @@ $(document).ready(function () {
                 timer: 1500,
                 showConfirmButton: false
             });
+
+            $('#cart-coupon').removeClass('d-none').addClass('d-block');
+            $('#cart-coupon').html(`Cupon: ${discount}%`);
+            $('#apply-coupon').prop('disabled', true);
+            $('#coupon-code').prop('disabled', true);
         }).catch(error => {
             handleRequestError(error);
         });
@@ -98,30 +103,29 @@ $(document).ready(function () {
             totalAmount: totalAmount
         };
 
-        makeAuthenticatedRequest({
-            method: 'POST',
-            url: `${API_URL}/order`,
-            data: orderData
-        }).then(response => {
-            Swal.fire({
-                icon: 'success',
-                title: 'Pedido realizado!',
-                text: 'Tu pedido ha sido realizado con éxito.',
-                confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    localStorage.removeItem('cart');
-                    window.location.href = '/pages/order-confirmation.html';
-                }
-            });
-        }).catch(error => {
-            handleRequestError(error);
+        Swal.fire({
+            icon: 'warning',
+            title: 'Pedido',
+            text: '¿Estas seguro de realizar el pedido?',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                makeAuthenticatedRequest({
+                    method: 'POST',
+                    url: `${API_URL}/order`,
+                    data: orderData
+                }).then(response => {
+                    window.location.href = '/resume.html';
+                }).catch(error => {
+                    handleRequestError(error);
+                });
+            }
         });
+
     });
 
 
     loadCartItems();
-
 
 
     function updateTotalDisplay(total) {

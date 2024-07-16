@@ -68,7 +68,7 @@ $(document).ready(function () {
                 const role = localStorage.getItem('userRole');
 
                 if (role === 'Admin') {
-                    window.location.href = '/dashboard.html';
+                    window.location.href = '/admin/dashboard.html';
                 } else {
                     window.location.href = '/products.html';
                 }
