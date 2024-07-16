@@ -8,12 +8,12 @@ namespace  cyberforgepc.Domain.UnitOfWork
 
     public interface IUnitOfWork : IDisposable
     {
-        IRepository<Products> Products { get; set; }
-        IRepository<Users> Users { get; set; }
-        IRepository<Categories> Categories { get; set; }
-        IRepository<Coupons> Coupons { get; set; }
-        IRepository<WishLists> WishLists { get; set; }
-        IRepository<Orders> Orders { get; set; }
+        IRepository<Product> Product { get; set; }
+        IRepository<User> User { get; set; }
+        IRepository<Category> Category { get; set; }
+        IRepository<Coupon> Coupon { get; set; }
+        IRepository<WishList> WishList { get; set; }
+        IRepository<Order> Order { get; set; }
         Task<bool> Save();
     }
 }

@@ -16,9 +16,9 @@
     [Produces("application/json")]    
     public class CategoryController : ControllerBase
     {
-        private readonly ICategory categoryManager;
+        private readonly ICategories categoryManager;
 
-        public CategoryController(ICategory categoryManager)  => this.categoryManager = categoryManager;
+        public CategoryController(ICategories categoryManager)  => this.categoryManager = categoryManager;
 
 
         [HttpGet]
@@ -50,9 +50,9 @@
                 var result = await categoryManager.GetById(id);
                 return Ok(new { data = result });
             }
-            catch (CountryNotFoundException countryEx)
+            catch (MessageException ex)
             {
-                return NotFound(new { code = countryEx.ExceptionCode, message = countryEx.Message });
+                return NotFound(new { code = ex.ExceptionCode, message = ex.Message });
             }
             catch (Exception ex)
             {
@@ -91,9 +91,9 @@
                 var result = await categoryManager.Update(id, request);
                 return Ok(new { data = result });
             }
-            catch (LockerNotFoundException lockerEx)
+            catch (MessageException ex)
             {
-                return NotFound(new { code = lockerEx.ExceptionCode, message = lockerEx.Message });
+                return NotFound(new { code = ex.ExceptionCode, message = ex.Message });
             }
             catch (Exception ex)
             {

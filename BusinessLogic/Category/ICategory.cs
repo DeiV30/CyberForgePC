@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public interface ICategory
+    public interface ICategories
     {
         Task<List<CategoryResponse>> GetAll();
         Task<CategoryResponse> GetById(string id);

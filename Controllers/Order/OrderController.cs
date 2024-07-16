@@ -15,9 +15,9 @@
     [Produces("application/json")]
     public class OrderController : ControllerBase
     {
-        private readonly IOrder orderManager;
+        private readonly IOrders orderManager;
 
-        public OrderController(IOrder orderManager) => this.orderManager = orderManager;
+        public OrderController(IOrders orderManager) => this.orderManager = orderManager;
 
 
         [HttpGet("{id}")]
@@ -32,9 +32,9 @@
                 var result = await orderManager.GetById(id);
                 return Ok(new { data = result });
             }
-            catch (CountryNotFoundException countryEx)
+            catch (MessageException ex)
             {
-                return NotFound(new { code = countryEx.ExceptionCode, message = countryEx.Message });
+                return NotFound(new { code = ex.ExceptionCode, message = ex.Message });
             }
             catch (Exception ex)
             {

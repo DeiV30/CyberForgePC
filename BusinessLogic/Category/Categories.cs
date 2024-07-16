@@ -9,15 +9,15 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class Category : ICategory
+    public class Categories : ICategories
     {
         private readonly IUnitOfWork unitOfWork;
 
-        public Category(IUnitOfWork unitOfWork) => this.unitOfWork = unitOfWork;
+        public Categories(IUnitOfWork unitOfWork) => this.unitOfWork = unitOfWork;
 
         public async Task<List<CategoryResponse>> GetAll()
         {
-            var category = await unitOfWork.Categories.GetAll();
+            var category = await unitOfWork.Category.GetAll();
 
             var response = new List<CategoryResponse>();
 
@@ -35,10 +35,10 @@
 
         public async Task<CategoryResponse> GetById(string id)
         {
-            var category = await unitOfWork.Categories.FindWhere(c => c.Id.Equals(id));
+            var category = await unitOfWork.Category.FindWhere(c => c.Id.Equals(id));
 
             if (category == null)
-                throw new CountryNotFoundException("Country not found in the database.");
+                throw new MessageException("Country not found in the database.");
 
             var response = new CategoryResponse
             {
@@ -51,7 +51,7 @@
 
         public async Task<bool> Create(CategoryRequest request)
         {
-            var categoryCreate = new Categories
+            var categoryCreate = new Category
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = request.Name,
@@ -59,7 +59,7 @@
                 Created = DateTime.Now,
             };
 
-            unitOfWork.Categories.Add(categoryCreate);
+            unitOfWork.Category.Add(categoryCreate);
             await unitOfWork.Save();
 
             return true;
@@ -67,16 +67,16 @@
 
         public async Task<bool> Update(string id, CategoryUpdateRequest request)
         {
-            var categoryUpdate = await unitOfWork.Categories.FindWhere(l => l.Id.Equals(id));
+            var categoryUpdate = await unitOfWork.Category.FindWhere(l => l.Id.Equals(id));
 
             if (categoryUpdate == null)
-                throw new LockerNotFoundException("Category not found in the database.");
+                throw new MessageException("No se han encontrado resultados.");
 
             categoryUpdate.Name = request.Name;
             categoryUpdate.Description = request.Description;
             categoryUpdate.Updated = DateTime.Now;
 
-            unitOfWork.Categories.Update(categoryUpdate);
+            unitOfWork.Category.Update(categoryUpdate);
             await unitOfWork.Save();
 
             return true;

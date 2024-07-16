@@ -24,7 +24,7 @@ namespace  cyberforgepc.Helpers.Authentication
 
         public AuthenticationHelper(IOptions<AppSettings> appSettings) => this.appSettings = appSettings.Value;
 
-        public AuthenticationData Authenticate(Users user)
+        public AuthenticationData Authenticate(User user)
         {
             var RemoveAcentuatioName = System.Web.HttpUtility.UrlDecode(System.Web.HttpUtility.UrlEncode(
                 user.Name, Encoding.GetEncoding("iso-8859-7")));

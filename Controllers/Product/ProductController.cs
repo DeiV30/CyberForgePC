@@ -16,9 +16,9 @@ namespace cyberforgepc.Controllers.Product
     [Produces("application/json")]
     public class ProductController : ControllerBase
     {
-        private readonly IProduct productManager;
+        private readonly IProducts productManager;
 
-        public ProductController(IProduct productManager) => this.productManager = productManager;
+        public ProductController(IProducts productManager) => this.productManager = productManager;
 
 
         [HttpGet]
@@ -52,9 +52,9 @@ namespace cyberforgepc.Controllers.Product
                 var result = await productManager.GetById(id);
                 return Ok(new { data = result });
             }
-            catch (ProductNotFoundException productEx)
+            catch (MessageException ex)
             {
-                return NotFound(new { code = productEx.ExceptionCode, message = productEx.Message });
+                return NotFound(new { code = ex.ExceptionCode, message = ex.Message });
             }
             catch (Exception ex)
             {
@@ -96,9 +96,9 @@ namespace cyberforgepc.Controllers.Product
                 await productManager.Update(id, request);
                 return Ok(new { data = true });
             }
-            catch (ProductNotFoundException productEx)
+            catch (MessageException ex)
             {
-                return NotFound(new { code = productEx.ExceptionCode, message = productEx.Message });
+                return NotFound(new { code = ex.ExceptionCode, message = ex.Message });
             }
             catch (Exception ex)
             {
@@ -120,9 +120,9 @@ namespace cyberforgepc.Controllers.Product
                 await productManager.Delete(id);
                 return Ok(new { data = true });
             }
-            catch (ProductNotFoundException productEx)
+            catch (MessageException ex)
             {
-                return NotFound(new { code = productEx.ExceptionCode, message = productEx.Message });
+                return NotFound(new { code = ex.ExceptionCode, message = ex.Message });
             }
             catch (Exception ex)
             {

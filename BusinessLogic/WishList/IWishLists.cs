@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public interface IWishList
+    public interface IWishLists
     {
         Task<List<WishListResponse>> GetById(string id);
         Task<bool> Create(WishListRequest request);

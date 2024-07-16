@@ -1,4 +1,4 @@
-﻿namespace  cyberforgepc.BusinessLogic
+﻿namespace cyberforgepc.BusinessLogic
 {
     using cyberforgepc.Database.Models;
     using cyberforgepc.Domain.UnitOfWork;
@@ -10,15 +10,15 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class Coupon : ICoupon
+    public class Coupons : ICoupons
     {
         private readonly IUnitOfWork unitOfWork;
 
-        public Coupon(IUnitOfWork unitOfWork) => this.unitOfWork = unitOfWork;
+        public Coupons(IUnitOfWork unitOfWork) => this.unitOfWork = unitOfWork;
 
         public async Task<List<CouponResponse>> GetAll()
         {
-            var coupon = await unitOfWork.Coupons.GetAll();
+            var coupon = await unitOfWork.Coupon.GetAll();
 
             var response = new List<CouponResponse>();
 
@@ -38,10 +38,10 @@
 
         public async Task<CouponResponse> GetById(string id)
         {
-            var coupon = await unitOfWork.Coupons.FindWhere(x => x.Id.Equals(id));
+            var coupon = await unitOfWork.Coupon.FindWhere(x => x.Id.Equals(id));
 
             if (coupon == null)
-                throw new CountryNotFoundException("Country not found in the database.");
+                throw new MessageException("Este cupon no se encuentra registrado.");
 
             var response = new CouponResponse
             {
@@ -56,7 +56,7 @@
 
         public async Task<bool> Create(CouponRequest request)
         {
-            var couponCreate = new Coupons
+            var couponCreate = new Coupon
             {
                 Id = Guid.NewGuid().ToString(),
                 Code = request.Code,
@@ -65,7 +65,7 @@
                 Created = DateTime.Now,
             };
 
-            unitOfWork.Coupons.Add(couponCreate);
+            unitOfWork.Coupon.Add(couponCreate);
             await unitOfWork.Save();
 
             return true;
@@ -73,17 +73,17 @@
 
         public async Task<bool> Update(string id, CouponUpdateRequest request)
         {
-            var couponUpdate = await unitOfWork.Coupons.FindWhere(x => x.Id.Equals(id));
+            var couponUpdate = await unitOfWork.Coupon.FindWhere(x => x.Id.Equals(id));
 
             if (couponUpdate == null)
-                throw new LockerNotFoundException("Coupon not found in the database.");
+                throw new MessageException("No se han encontrado resultados.");
 
             couponUpdate.Code = request.Code;
             couponUpdate.Discount = request.Discount;
             couponUpdate.ExpirationDate = request.ExpirationDate;
             couponUpdate.Updated = DateTime.Now;
 
-            unitOfWork.Coupons.Update(couponUpdate);
+            unitOfWork.Coupon.Update(couponUpdate);
             await unitOfWork.Save();
 
             return true;

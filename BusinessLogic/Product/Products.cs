@@ -10,15 +10,15 @@ namespace cyberforgepc.BusinessLogic
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class Product : IProduct
+    public class Products : IProducts
     {
         private readonly IUnitOfWork unitOfWork;
 
-        public Product(IUnitOfWork unitOfWork) => this.unitOfWork = unitOfWork;
+        public Products(IUnitOfWork unitOfWork) => this.unitOfWork = unitOfWork;
 
         public async Task<List<ProductResponse>> GetAll()
         {
-            var product = await unitOfWork.Products.GetAll(x => x.Category);
+            var product = await unitOfWork.Product.GetAll(x => x.Category);
 
             var productResponse = new List<ProductResponse>();
 
@@ -36,6 +36,8 @@ namespace cyberforgepc.BusinessLogic
                     Image = p.Image,
                     DeleteKey = p.DeleteKey,
                     Description = p.Description,
+                    Price = p.Price,
+                    Stock = p.Stock,
                     Created = p.Created,
                     Updated = p.Updated
                 });
@@ -46,10 +48,10 @@ namespace cyberforgepc.BusinessLogic
 
         public async Task<ProductResponse> GetById(string id)
         {
-            var product = await unitOfWork.Products.FindWhere(p => p.Id.Equals(id), c => c.Category);
+            var product = await unitOfWork.Product.FindWhere(p => p.Id.Equals(id), c => c.Category);
 
             if (product == null)
-                throw new ProductNotFoundException("Product not found in the database.");
+                throw new MessageException("No se han encontrado resultados.");
 
             var productResponse = new ProductResponse
             {
@@ -71,7 +73,7 @@ namespace cyberforgepc.BusinessLogic
 
         public async Task<bool> Create(ProductRequest requests)
         {
-            var list = new Products()
+            var list = new Product()
             {
 
                 Id = Guid.NewGuid().ToString(),
@@ -84,7 +86,7 @@ namespace cyberforgepc.BusinessLogic
                 Created = DateTime.Now
             };
 
-            unitOfWork.Products.Add(list);
+            unitOfWork.Product.Add(list);
             await unitOfWork.Save();
 
             return true;
@@ -92,10 +94,10 @@ namespace cyberforgepc.BusinessLogic
 
         public async Task<bool> Update(string id, ProductRequest request)
         {
-            var productToUpdate = await unitOfWork.Products.FindWhere(p => p.Id.Equals(id));
+            var productToUpdate = await unitOfWork.Product.FindWhere(p => p.Id.Equals(id));
 
             if (productToUpdate == null)
-                throw new ProductNotFoundException("Product not found in the database.");
+                throw new MessageException("No se han encontrado resultados.");
 
             productToUpdate.Name = request.Name;
             productToUpdate.Description = request.Description;
@@ -105,7 +107,7 @@ namespace cyberforgepc.BusinessLogic
             productToUpdate.Stock = request.Stock;
             productToUpdate.Updated = DateTime.Now;
 
-            unitOfWork.Products.Update(productToUpdate);
+            unitOfWork.Product.Update(productToUpdate);
             await unitOfWork.Save();
 
             return true;
@@ -113,15 +115,15 @@ namespace cyberforgepc.BusinessLogic
 
         public async Task<bool> Delete(string id)
         {
-            var product = await unitOfWork.Products.FindWhere(p => p.Id.Equals(id));
+            var product = await unitOfWork.Product.FindWhere(p => p.Id.Equals(id));
 
             if (product == null)
-                throw new ProductNotFoundException("Product not found in the database.");
+                throw new MessageException("No se han encontrado resultados.");
 
             product.Id = Guid.NewGuid().ToString();
             product.Updated = DateTime.Now;
 
-            unitOfWork.Products.Update(product);
+            unitOfWork.Product.Update(product);
             await unitOfWork.Save();
 
             return true;

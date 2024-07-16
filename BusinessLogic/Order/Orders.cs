@@ -13,16 +13,15 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class Order : IOrder
+    public class Orders : IOrders
     {
         private readonly IUnitOfWork unitOfWork;
 
-        public Order(IUnitOfWork unitOfWork) => this.unitOfWork = unitOfWork;
-
+        public Orders(IUnitOfWork unitOfWork) => this.unitOfWork = unitOfWork;
 
         public async Task<List<OrderResponse>> GetAll()
         {
-            var order = await unitOfWork.Orders.GetAll(x => x.Product, y => y.User, z => z.Coupon);
+            var order = await unitOfWork.Order.GetAll(x => x.OrderItems, y => y.User, z => z.Coupon);
 
             return order.Select(x => new OrderResponse
             {
@@ -40,14 +39,14 @@
                 },
                 Products = new List<ProductResponse>
                    {
-                       new ProductResponse
-                       {
-                           Id = x.Product.Id,
-                           Name = x.Product.Name,
-                           Description = x.Product.Description,
-                           Price = x.Product.Price,
-                           Image = x.Product.Image,
-                       }
+                       //new ProductResponse
+                       //{
+                       //    Id = x.Product.Id,
+                       //    Name = x.Product.Name,
+                       //    Description = x.Product.Description,
+                       //    Price = x.Product.Price,
+                       //    Image = x.Product.Image,
+                       //}
                    },
                 SubTotal = x.SubTotal,
                 Total = x.Total,
@@ -57,10 +56,10 @@
 
         public async Task<OrderResponse> GetById(string id)
         {
-            var order = await unitOfWork.Orders.FindWhere(x => x.Id.Equals(id), y => y.Product, z => z.User, w => w.Coupon);
+            var order = await unitOfWork.Order.FindWhere(x => x.Id.Equals(id), y => y.OrderItems, z => z.User, w => w.Coupon);
 
             if (order == null)
-                throw new CountryNotFoundException("Country not found in the database.");
+                throw new MessageException("Country not found in the database.");
 
             var response = new OrderResponse
             {
@@ -78,14 +77,14 @@
                 },
                 Products = new List<ProductResponse>
                 {
-                    new ProductResponse
-                    {
-                        Id = order.Product.Id,
-                        Name = order.Product.Name,
-                        Description = order.Product.Description,
-                        Price = order.Product.Price,
-                        Image = order.Product.Image,
-                    }
+                    //new ProductResponse
+                    //{
+                    //    Id = order.Product.Id,
+                    //    Name = order.Product.Name,
+                    //    Description = order.Product.Description,
+                    //    Price = order.Product.Price,
+                    //    Image = order.Product.Image,
+                    //}
                 },
                 SubTotal = order.SubTotal,
                 Total = order.Total,
@@ -97,10 +96,9 @@
 
         public async Task<bool> Create(OrderRequest request)
         {
-            var orderCreate = new Orders
+            var orderCreate = new Order
             {
-                Id = Guid.NewGuid().ToString(),
-                ProductId = request.ProductId,
+                Id = Guid.NewGuid().ToString(),                
                 UserId = request.UserId,
                 CouponId = request.CouponId,
                 SubTotal = request.SubTotal,
@@ -108,7 +106,7 @@
                 Created = DateTime.Now,
             };
 
-            unitOfWork.Orders.Add(orderCreate);
+            unitOfWork.Order.Add(orderCreate);
             await unitOfWork.Save();
 
             return true;
@@ -116,12 +114,12 @@
 
         public async Task<bool> State(string id, string state)
         {
-            var order = await unitOfWork.Orders.FindWhere(x => x.Id.Equals(id));
+            var order = await unitOfWork.Order.FindWhere(x => x.Id.Equals(id));
 
             order.Updated = System.DateTime.UtcNow;
             order.State = state;
 
-            unitOfWork.Orders.Update(order);
+            unitOfWork.Order.Update(order);
             await unitOfWork.Save();
 
             return true;

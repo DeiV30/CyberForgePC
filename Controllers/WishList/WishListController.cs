@@ -18,9 +18,9 @@
     [Produces("application/json")]
     public class WishListController : ControllerBase
     {
-        private readonly IWishList wishListManager;
+        private readonly IWishLists wishListManager;
 
-        public WishListController(IWishList wishListManager) => this.wishListManager = wishListManager;
+        public WishListController(IWishLists wishListManager) => this.wishListManager = wishListManager;
 
 
         [HttpGet("{id}")]
@@ -34,9 +34,9 @@
                 var result = await wishListManager.GetById(id);
                 return Ok(new { data = result });
             }
-            catch (CountryNotFoundException countryEx)
+            catch (MessageException ex)
             {
-                return NotFound(new { code = countryEx.ExceptionCode, message = countryEx.Message });
+                return NotFound(new { code = ex.ExceptionCode, message = ex.Message });
             }
             catch (Exception ex)
             {

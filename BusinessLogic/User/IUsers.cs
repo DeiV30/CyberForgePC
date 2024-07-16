@@ -5,7 +5,7 @@ namespace  cyberforgepc.BusinessLogic
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public interface IUser
+    public interface IUsers
     {
         Task<UserResponseAuth> Authenticate(UserLoginRequest request);        
         Task<RefreshTokenResponse> RefreshToken(RefreshTokenRequest request);     

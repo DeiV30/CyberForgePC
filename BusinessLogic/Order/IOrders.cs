@@ -5,7 +5,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public interface IOrder
+    public interface IOrders
     {
         Task<List<OrderResponse>> GetAll();
         Task<OrderResponse> GetById(string id);

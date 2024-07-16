@@ -4,7 +4,7 @@ namespace cyberforgepc.BusinessLogic
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public interface IProduct
+    public interface IProducts
     {
         Task<List<ProductResponse>> GetAll();
         Task<ProductResponse> GetById(string id);

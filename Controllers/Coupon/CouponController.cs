@@ -1,4 +1,6 @@
-﻿namespace cyberforgepc.Controllers.Coupon
+﻿using System.IO;
+
+namespace cyberforgepc.Controllers.Coupon
 {
     using cyberforgepc.BusinessLogic;
     using cyberforgepc.Helpers.Common;
@@ -9,19 +11,20 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System;
+    using System.Data;
     using System.Threading.Tasks;
 
     [ApiController]
-    [AllowAnonymous]
     [Route("api/[controller]")]
     [Produces("application/json")]    
     public class CouponController : ControllerBase
     {
-        private readonly ICoupon couponManager;
+        private readonly ICoupons couponManager;
 
-        public CouponController(ICoupon couponManager) => this.couponManager = couponManager;
+        public CouponController(ICoupons couponManager) => this.couponManager = couponManager;
 
         [HttpGet]
+        [Authorize(Role.Admin)]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -39,6 +42,7 @@
         }
 
         [HttpGet("{id}")]
+        [AuthorizeMultiple(Role.Admin, Role.Client)]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -49,9 +53,9 @@
                 var result = await couponManager.GetById(id);
                 return Ok(new { data = result });
             }
-            catch (CountryNotFoundException countryEx)
+            catch (MessageException ex)
             {
-                return NotFound(new { code = countryEx.ExceptionCode, message = countryEx.Message });
+                return NotFound(new { code = ex.ExceptionCode, message = ex.Message });
             }
             catch (Exception ex)
             {
@@ -60,6 +64,7 @@
         }
 
         [HttpPost]
+        [Authorize(Role.Admin)]
         [ValidationModel]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
@@ -78,6 +83,7 @@
         }
 
         [HttpPut("{id}")]
+        [Authorize(Role.Admin)]
         [ValidationModel]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]

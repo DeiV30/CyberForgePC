@@ -15,14 +15,14 @@ namespace cyberforgepc.BusinessLogic
     using System.Security.Claims;
     using System.Threading.Tasks;
 
-    public class User : IUser
+    public class Users : IUsers
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IAuthenticationHelper authenticationHelper;
         private readonly ISecurityHelper passwordHasher;
         private readonly IMailHelper emailServices;
 
-        public User(IUnitOfWork unitOfWork, IAuthenticationHelper authenticationHelper,
+        public Users(IUnitOfWork unitOfWork, IAuthenticationHelper authenticationHelper,
             ISecurityHelper passwordHasher, IMailHelper emailServices)
         {
             this.unitOfWork = unitOfWork;
@@ -35,10 +35,10 @@ namespace cyberforgepc.BusinessLogic
 
         public async Task<UserResponseAuth> Authenticate(UserLoginRequest request)
         {
-            var user = await unitOfWork.Users.FindWhere(u => u.Email == request.Email);
+            var user = await unitOfWork.User.FindWhere(u => u.Email == request.Email);
 
             if (user == null)
-                throw new UserNotExistsException("No encontramos registro de este correo en nuestro sistema");
+                throw new MessageException("No se han encontrado resultados.");
 
 
 
@@ -49,7 +49,7 @@ namespace cyberforgepc.BusinessLogic
                 validUser = user.PasswordHash.SequenceEqual(passwordHasher.HashPassword(request.Password, user.PasswordSalt).PasswordHash);
 
                 if (validUser == false)
-                    throw new UserPasswordIncorrectException("Verifica los datos de ingrerso");
+                    throw new MessageException("Verifica los datos de ingrerso");
 
                 var accessToken = authenticationHelper.Authenticate(user);
                 string refreshToken = authenticationHelper.GenerateRefreshToken();
@@ -63,14 +63,14 @@ namespace cyberforgepc.BusinessLogic
                     AccessToken = accessToken.Token,
                 };
 
-                unitOfWork.Users.Update(user);
+                unitOfWork.User.Update(user);
                 await unitOfWork.Save();
 
                 return userData;
             }
             else
             {
-                throw new UserNotPasswordException("Dirigete a recuperar mi contraseña y asigna una nueva");
+                throw new MessageException("Dirigete a recuperar mi contraseña y asigna una nueva");
             }
         }
         public async Task<RefreshTokenResponse> RefreshToken(RefreshTokenRequest request)
@@ -78,13 +78,13 @@ namespace cyberforgepc.BusinessLogic
             var principal = authenticationHelper.GetPrincipalFromExpiredToken(request.AccessToken);
 
             if (principal == null)
-                throw new UserSecurityTokenException("Invalid token");
+                throw new MessageException("Token invalido");
 
             var username = principal.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).First();
-            var user = await unitOfWork.Users.FindWhere(u => u.Id == username.Value);
+            var user = await unitOfWork.User.FindWhere(u => u.Id == username.Value);
 
             if (user.RefreshToken != request.RefreshToken)
-                throw new UserSecurityTokenException("Invalid refresh token");
+                throw new MessageException("Token invalido de reautenticacion");
 
             var newToken = authenticationHelper.GenerateToken(principal.Claims);
             var newRefreshToken = authenticationHelper.GenerateRefreshToken();
@@ -92,7 +92,7 @@ namespace cyberforgepc.BusinessLogic
             user.RefreshToken = newRefreshToken;
             user.RefreshTimeStamp = newToken.Expired;
 
-            unitOfWork.Users.Update(user);
+            unitOfWork.User.Update(user);
             await unitOfWork.Save();
 
             return new RefreshTokenResponse
@@ -108,7 +108,7 @@ namespace cyberforgepc.BusinessLogic
 
         public async Task<List<UserResponse>> GetAll()
         {
-            var users = await unitOfWork.Users.GetWhere(u => u.Discriminator == "Client");
+            var users = await unitOfWork.User.GetWhere(u => u.Discriminator == "Client");
 
             var usersResponse = new List<UserResponse>();
 
@@ -129,10 +129,10 @@ namespace cyberforgepc.BusinessLogic
 
         public async Task<UserResponse> GetById(string id)
         {
-            var user = await unitOfWork.Users.FindWhere(u => u.Id.Equals(id));
+            var user = await unitOfWork.User.FindWhere(u => u.Id.Equals(id));
 
             if (user == null)
-                throw new UserNotExistsException("User not found in the database.");
+                throw new MessageException("No se han encontrado resultados.");
 
             UserResponse userResponse = new UserResponse
             {
@@ -148,16 +148,16 @@ namespace cyberforgepc.BusinessLogic
 
         public async Task<bool> Create(UserInsertRequest request)
         {
-            var userExists = await unitOfWork.Users.FindWhere(u => u.Email.Equals(request.Email));
+            var userExists = await unitOfWork.User.FindWhere(u => u.Email.Equals(request.Email));
 
             if (userExists != null)
-                throw new UserAlreadyExistsException("Este correo ya se encuentra registrado en nuestro sistema");
+                throw new MessageException("No se han encontrado resultados.");
 
             var passwordHashResult = passwordHasher.HashPassword(request.Password);
 
             var id = Guid.NewGuid().ToString();
 
-            var userToCreate = new Users
+            var userToCreate = new User
             {
                 Id = id,
                 Name = request.Name,
@@ -169,7 +169,7 @@ namespace cyberforgepc.BusinessLogic
                 PasswordSalt = passwordHashResult.PasswordSalt
             };
 
-            unitOfWork.Users.Add(userToCreate);
+            unitOfWork.User.Add(userToCreate);
 
             await unitOfWork.Save();
 
@@ -186,10 +186,10 @@ namespace cyberforgepc.BusinessLogic
 
         public async Task<bool> Update(string id, UserUpdateRequest request)
         {
-            var userToUpdate = await unitOfWork.Users.FindWhere(u => u.Id.Equals(id));
+            var userToUpdate = await unitOfWork.User.FindWhere(u => u.Id.Equals(id));
 
             if (userToUpdate == null)
-                throw new UserNotExistsException("User not found in the database.");
+                throw new MessageException("No se han encontrado resultados.");
 
             userToUpdate.Name = request.Name;
             userToUpdate.Email = request.Email;
@@ -203,7 +203,7 @@ namespace cyberforgepc.BusinessLogic
                 userToUpdate.PasswordSalt = passwordHashResult.PasswordSalt;
             }
 
-            unitOfWork.Users.Update(userToUpdate);
+            unitOfWork.User.Update(userToUpdate);
             await unitOfWork.Save();
 
             return true;

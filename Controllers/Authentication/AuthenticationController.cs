@@ -16,9 +16,9 @@ namespace cyberforgepc.Controllers.Authentication
     [Produces("application/json")]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IUser userManager;
+        private readonly IUsers userManager;
 
-        public AuthenticationController(IUser userManager) => this.userManager = userManager;
+        public AuthenticationController(IUsers userManager) => this.userManager = userManager;
 
 
         [HttpPost("loginEmail")]
@@ -36,21 +36,9 @@ namespace cyberforgepc.Controllers.Authentication
                 var user = await userManager.Authenticate(request);
                 return Ok(new { data = user });
             }
-            catch (UserNotExistsException userNoEx)
+            catch (MessageException ex)
             {
-                return StatusCode(403, new { code = userNoEx.ExceptionCode, message = userNoEx.Message });
-            }
-            catch (UserInactiveException userInEx)
-            {
-                return StatusCode(403, new { code = userInEx.ExceptionCode, message = userInEx.Message });
-            }
-            catch (UserPasswordIncorrectException userPassEx)
-            {
-                return StatusCode(403, new { code = userPassEx.ExceptionCode, message = userPassEx.Message });
-            }
-            catch (UserNotPasswordException userNotPassEx)
-            {
-                return StatusCode(403, new { code = userNotPassEx.ExceptionCode, message = userNotPassEx.Message });
+                return StatusCode(403, new { code = ex.ExceptionCode, message = ex.Message });
             }
             catch (Exception ex)
             {
@@ -73,9 +61,9 @@ namespace cyberforgepc.Controllers.Authentication
                 var result = await userManager.RefreshToken(request);
                 return Ok(new { data = result });
             }
-            catch (UserSecurityTokenException secEx)
+            catch (MessageException ex)
             {
-                return StatusCode(403, new { code = secEx.ExceptionCode, message = secEx.Message });
+                return StatusCode(403, new { code = ex.ExceptionCode, message = ex.Message });
             }
             catch (Exception ex)
             {

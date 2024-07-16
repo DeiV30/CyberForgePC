@@ -12,12 +12,12 @@ namespace  cyberforgepc.Domain.UnitOfWork
     {
         #region "IUnitOfWork Properties"
 
-        public IRepository<Products> Products { get; set; }
-        public IRepository<Users> Users { get; set; }
-        public IRepository<Categories> Categories { get; set; }
-        public IRepository<Coupons> Coupons { get; set; }
-        public IRepository<WishLists> WishLists { get; set; }
-        public IRepository<Orders> Orders { get; set; }
+        public IRepository<Product> Product { get; set; }
+        public IRepository<User> User { get; set; }
+        public IRepository<Category> Category { get; set; }
+        public IRepository<Coupon> Coupon { get; set; }
+        public IRepository<WishList> WishList { get; set; }
+        public IRepository<Order> Order { get; set; }
 
         #endregion
 

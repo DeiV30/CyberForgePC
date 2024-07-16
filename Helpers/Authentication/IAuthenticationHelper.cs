@@ -9,7 +9,7 @@ namespace  cyberforgepc.Helpers.Authentication
 
     public interface IAuthenticationHelper
     {
-        AuthenticationData Authenticate(Users user);
+        AuthenticationData Authenticate(User user);
         AuthenticationData GenerateToken(IEnumerable<Claim> claims);
         string GenerateRefreshToken();        
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token);

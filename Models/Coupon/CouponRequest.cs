@@ -10,7 +10,7 @@ namespace  cyberforgepc.Models.Coupon
         [Required]
         public int Discount { get; set; }
         [Required]
-        public DateTime ExpirationDate { get; set; }
+        public DateOnly ExpirationDate { get; set; }
     }
 
     public class CouponUpdateRequest
@@ -20,6 +20,6 @@ namespace  cyberforgepc.Models.Coupon
         [Required]
         public int Discount { get; set; }
         [Required]
-        public DateTime ExpirationDate { get; set; }
+        public DateOnly ExpirationDate { get; set; }
     }
 }

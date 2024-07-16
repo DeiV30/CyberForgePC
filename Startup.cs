@@ -146,12 +146,12 @@
 
             containerBuilder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
 
-            containerBuilder.RegisterType<Product>().As<IProduct>();
-            containerBuilder.RegisterType<User>().As<IUser>();
-            containerBuilder.RegisterType<Coupon>().As<ICoupon>();
-            containerBuilder.RegisterType<WishList>().As<IWishList>();
-            containerBuilder.RegisterType<Category>().As<ICategory>();
-            containerBuilder.RegisterType<Order>().As<IOrder>();
+            containerBuilder.RegisterType<Products>().As<IProducts>();
+            containerBuilder.RegisterType<Users>().As<IUsers>();
+            containerBuilder.RegisterType<Coupons>().As<ICoupons>();
+            containerBuilder.RegisterType<WishLists>().As<IWishLists>();
+            containerBuilder.RegisterType<Categories>().As<ICategories>();
+            containerBuilder.RegisterType<Orders>().As<IOrders>();
 
             containerBuilder.RegisterType<UnitOfWork>().As<IUnitOfWork>().PropertiesAutowired();
 

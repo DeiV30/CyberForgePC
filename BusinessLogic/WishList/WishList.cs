@@ -10,18 +10,18 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public class WishList : IWishList
+    public class WishLists : IWishLists
     {
         private readonly IUnitOfWork unitOfWork;
 
-        public WishList(IUnitOfWork unitOfWork) => this.unitOfWork = unitOfWork;
+        public WishLists(IUnitOfWork unitOfWork) => this.unitOfWork = unitOfWork;
 
         public async Task<List<WishListResponse>> GetById(string id)
         {
-            var wishList = await unitOfWork.WishLists.GetWhere(x => x.UserId.Equals(id), y => y.Product.Category);
+            var wishList = await unitOfWork.WishList.GetWhere(x => x.UserId.Equals(id), y => y.Product.Category);
 
             if (wishList == null)
-                throw new CountryNotFoundException("Country not found in the database.");
+                throw new MessageException("No se han encontrado resultados.");
 
             var response = new List<WishListResponse>();
 
@@ -51,12 +51,12 @@
 
         public async Task<bool> Create(WishListRequest request)
         {
-            var wishLists = await unitOfWork.WishLists.FindWhere(x => x.UserId.Equals(request.UserId) && x.ProductId.Equals(request.ProductId));
+            var wishLists = await unitOfWork.WishList.FindWhere(x => x.UserId.Equals(request.UserId) && x.ProductId.Equals(request.ProductId));
 
             if (wishLists != null)
                 return false;
 
-            var wishListCreate = new WishLists
+            var wishListCreate = new WishList
             {
                 Id = Guid.NewGuid().ToString(),
                 ProductId = request.ProductId,
@@ -64,7 +64,7 @@
                 Created = DateTime.Now,
             };
 
-            unitOfWork.WishLists.Add(wishListCreate);
+            unitOfWork.WishList.Add(wishListCreate);
             await unitOfWork.Save();
 
             return true;
@@ -72,9 +72,9 @@
 
         public async Task<bool> Delete(string id)
         {
-            var wishLists = await unitOfWork.WishLists.FindWhere(x => x.Id.Equals(id));
+            var wishLists = await unitOfWork.WishList.FindWhere(x => x.Id.Equals(id));
 
-            unitOfWork.WishLists.Remove(wishLists);
+            unitOfWork.WishList.Remove(wishLists);
             await unitOfWork.Save();
 
             return true;

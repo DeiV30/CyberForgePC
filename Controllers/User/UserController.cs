@@ -15,9 +15,9 @@ namespace  cyberforgepc.Controllers.User
     [Produces("application/json")]
     public class UserController : ControllerBase
     {
-        private readonly IUser userManager;
+        private readonly IUsers userManager;
 
-        public UserController(IUser userManager) => this.userManager = userManager;
+        public UserController(IUsers userManager) => this.userManager = userManager;
 
 
         [HttpGet]
@@ -51,9 +51,9 @@ namespace  cyberforgepc.Controllers.User
                 var result = await userManager.GetById(id);
                 return Ok(new { data = result });
             }
-            catch (UserNotExistsException userEx)
+            catch (MessageException ex)
             {
-                return NotFound(new { code = userEx.ExceptionCode, message = userEx.Message });
+                return NotFound(new { code = ex.ExceptionCode, message = ex.Message });
             }
             catch (Exception ex)
             {
@@ -75,9 +75,9 @@ namespace  cyberforgepc.Controllers.User
                 var result = await userManager.Create(request);
                 return Ok(new { data = result });
             }
-            catch (UserAlreadyExistsException userEx)
+            catch (MessageException ex)
             {
-                return Conflict(new { code = userEx.ExceptionCode, message = userEx.Message });
+                return Conflict(new { code = ex.ExceptionCode, message = ex.Message });
             }
             catch (Exception ex)
             {
@@ -99,9 +99,9 @@ namespace  cyberforgepc.Controllers.User
                 await userManager.Update(id, request);
                 return Ok(new { data = true });
             }
-            catch (UserNotExistsException userEx)
+            catch (MessageException ex)
             {
-                return NotFound(new { code = userEx.ExceptionCode, message = userEx.Message });
+                return NotFound(new { code = ex.ExceptionCode, message = ex.Message });
             }
             catch (Exception ex)
             {
