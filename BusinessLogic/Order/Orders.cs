@@ -1,8 +1,7 @@
-﻿namespace  cyberforgepc.BusinessLogic
+﻿namespace cyberforgepc.BusinessLogic
 {
     using cyberforgepc.Database.Models;
     using cyberforgepc.Domain.UnitOfWork;
-    using cyberforgepc.Helpers.Common;
     using cyberforgepc.Helpers.Exceptions;
     using cyberforgepc.Models.Coupon;
     using cyberforgepc.Models.Order;
@@ -38,16 +37,16 @@
                     Discount = x.Coupon.Discount,
                 },
                 Products = new List<ProductResponse>
-                   {
-                       //new ProductResponse
-                       //{
-                       //    Id = x.Product.Id,
-                       //    Name = x.Product.Name,
-                       //    Description = x.Product.Description,
-                       //    Price = x.Product.Price,
-                       //    Image = x.Product.Image,
-                       //}
-                   },
+                {
+                    //new ProductResponse
+                    //{
+                    //    Id = x.Product.Id,
+                    //    Name = x.Product.Name,
+                    //    Description = x.Product.Description,
+                    //    Price = x.Product.Price,
+                    //    Image = x.Product.Image,
+                    //}
+                },
                 SubTotal = x.SubTotal,
                 Total = x.Total,
                 Created = x.Created,
@@ -59,7 +58,7 @@
             var order = await unitOfWork.Order.FindWhere(x => x.Id.Equals(id), y => y.OrderItems, z => z.User, w => w.Coupon);
 
             if (order == null)
-                throw new MessageException("Country not found in the database.");
+                throw new MessageException("No se han encontrado resultados.");
 
             var response = new OrderResponse
             {
@@ -98,7 +97,7 @@
         {
             var orderCreate = new Order
             {
-                Id = Guid.NewGuid().ToString(),                
+                Id = Guid.NewGuid().ToString(),
                 UserId = request.UserId,
                 CouponId = request.CouponId,
                 SubTotal = request.SubTotal,

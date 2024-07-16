@@ -26,7 +26,8 @@
                 response.Add(new CategoryResponse
                 {
                     Id = c.Id,
-                    Name = c.Name
+                    Name = c.Name,
+                    Description = c.Description
                 });
             });
 
@@ -38,12 +39,13 @@
             var category = await unitOfWork.Category.FindWhere(c => c.Id.Equals(id));
 
             if (category == null)
-                throw new MessageException("Country not found in the database.");
+                throw new MessageException("No se han encontrado resultados.");
 
             var response = new CategoryResponse
             {
                 Id = category.Id,
                 Name = category.Name,
+                Description = category.Description
             };
 
             return response;

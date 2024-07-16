@@ -36,12 +36,36 @@
             return response;
         }
 
-        public async Task<CouponResponse> GetById(string id)
+        public async Task<CouponResponse> GetByIdAdmin(string id)
         {
             var coupon = await unitOfWork.Coupon.FindWhere(x => x.Id.Equals(id));
 
             if (coupon == null)
-                throw new MessageException("Este cupon no se encuentra registrado.");
+                throw new MessageException("No se han encontrado resultados.");
+
+            var response = new CouponResponse
+            {
+                Id = coupon.Id,
+                Code = coupon.Code,
+                Discount = coupon.Discount,
+                ExpirationDate = coupon.ExpirationDate,
+            };
+
+            return response;
+        }
+
+
+        public async Task<CouponResponse> GetById(string id)
+        {
+            var coupon = await unitOfWork.Coupon.FindWhere(x => x.Code.Equals(id));
+
+            if (coupon == null)
+                throw new MessageException("No se han encontrado resultados.");
+
+            DateTime dateTimeFromDateOnly = coupon.ExpirationDate.ToDateTime(new TimeOnly(0));
+
+            if (dateTimeFromDateOnly < DateTime.Now)
+                throw new MessageException("El cupón ha expirado.");
 
             var response = new CouponResponse
             {

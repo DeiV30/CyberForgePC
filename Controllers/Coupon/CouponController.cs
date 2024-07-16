@@ -24,7 +24,7 @@ namespace cyberforgepc.Controllers.Coupon
         public CouponController(ICoupons couponManager) => this.couponManager = couponManager;
 
         [HttpGet]
-        [Authorize(Role.Admin)]
+        [Authorize(Roles = Role.Admin)]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -42,7 +42,7 @@ namespace cyberforgepc.Controllers.Coupon
         }
 
         [HttpGet("{id}")]
-        [AuthorizeMultiple(Role.Admin, Role.Client)]
+        [Authorize(Roles = Role.Client)]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -63,8 +63,30 @@ namespace cyberforgepc.Controllers.Coupon
             }
         }
 
+        [HttpGet("manager/{id}")]
+        [Authorize(Roles = Role.Admin)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetByIdAdmin(string id)
+        {
+            try
+            {
+                var result = await couponManager.GetByIdAdmin(id);
+                return Ok(new { data = result });
+            }
+            catch (MessageException ex)
+            {
+                return NotFound(new { code = ex.ExceptionCode, message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
         [HttpPost]
-        [Authorize(Role.Admin)]
+        [Authorize(Roles = Role.Admin)]
         [ValidationModel]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
@@ -83,7 +105,7 @@ namespace cyberforgepc.Controllers.Coupon
         }
 
         [HttpPut("{id}")]
-        [Authorize(Role.Admin)]
+        [Authorize(Roles = Role.Admin)]
         [ValidationModel]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]

@@ -62,6 +62,9 @@ namespace cyberforgepc.BusinessLogic
                     Id = product.Category.Id,
                     Name = product.Category.Name
                 },
+                Description = product.Description,
+                Stock = product.Stock,
+                DeleteKey = product.DeleteKey,
                 Image  = product.Image,
                 Price = product.Price,  
                 Created = product.Created,
