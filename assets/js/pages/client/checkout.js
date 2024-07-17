@@ -1,5 +1,6 @@
 $(document).ready(function () {
     let totalAmount = 0;
+    let couponId = ""
 
     function loadCartItems() {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -64,6 +65,8 @@ $(document).ready(function () {
                 showConfirmButton: false
             });
 
+            couponId = response.data.data.id;
+
             $('#cart-coupon').removeClass('d-none').addClass('d-block');
             $('#cart-coupon').html(`Cupon: ${discount}%`);
             $('#apply-coupon').prop('disabled', true);
@@ -98,9 +101,22 @@ $(document).ready(function () {
             return;
         }
 
+        const orderItems = cart.map(item => ({
+            productId: item.id,
+            quantity: item.quantity,
+            price: item.price
+        }));
+
+        const subTotal = orderItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+
+        const userId = localStorage.getItem('userId');
+
         const orderData = {
-            items: cart,
-            totalAmount: totalAmount
+            userId: userId,
+            couponId: couponId,
+            subTotal: subTotal,
+            total: totalAmount,
+            orderItems: orderItems,
         };
 
         Swal.fire({
@@ -115,6 +131,7 @@ $(document).ready(function () {
                     url: `${API_URL}/order`,
                     data: orderData
                 }).then(response => {
+                    localStorage.removeItem('cart');
                     window.location.href = '/resume.html';
                 }).catch(error => {
                     handleRequestError(error);
