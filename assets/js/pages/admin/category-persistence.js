@@ -83,7 +83,7 @@ $(document).ready(function () {
                     confirmButtonText: 'OK'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = '/pages/category-list.html';
+                        window.location.href = '/admin/category-list.html';
                     }
                 });
             }).catch(function (error) {

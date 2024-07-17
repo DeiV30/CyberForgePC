@@ -12,7 +12,7 @@ $(document).ready(function () {
 
         makeAuthenticatedRequest({
             method: 'GET',
-            url: `${API_URL}/coupon/${couponId}`
+            url: `${API_URL}/coupon/manager/${couponId}`
         }).then(response => {
             const coupon = response.data.data;
             if (coupon) {

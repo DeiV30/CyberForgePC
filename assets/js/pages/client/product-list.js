@@ -2,7 +2,7 @@ $(document).ready(function () {
 
     makeAnonymousRequest({
         method: 'GET',
-        url: `${API_URL}/product`
+        url: `${API_URL}/product/public`
     }).then(response => {
         const products = response.data.data;
         renderProducts(products);

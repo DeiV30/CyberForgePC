@@ -72,7 +72,9 @@ function handleRequestError(error) {
             Swal.fire({
                 icon: 'error',
                 title: 'Lo sentimos',
-                text: error.response.data.message,
+                text: "Usuario no autoizado.",
+            }).then(() => {
+                window.location.href = '/index.html';
             });
         } else {
             Swal.fire({

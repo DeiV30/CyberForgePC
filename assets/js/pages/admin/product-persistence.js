@@ -1,22 +1,51 @@
 $(document).ready(function () {
 
     function loadCategories() {
-        makeAuthenticatedRequest({
-            method: 'GET',
-            url: `${API_URL}/category`
-        }).then(response => {
-            const categories = response.data.data;
-            const categorySelect = $('#category');
-            categories.forEach(function (category) {
-                const option = `<option value="${category.id}">${category.name}</option>`;
-                categorySelect.append(option);
+        return new Promise((resolve, reject) => {
+            makeAuthenticatedRequest({
+                method: 'GET',
+                url: `${API_URL}/category`
+            }).then(response => {
+                const categories = response.data.data;
+                const categorySelect = $('#category');
+                categorySelect.empty();
+                categories.forEach(function (category) {
+                    const option = `<option value="${category.id}">${category.name}</option>`;
+                    categorySelect.append(option);
+                });
+                resolve();
+            }).catch(error => {
+                handleRequestError(error);
+                reject(error);
             });
-        }).catch(error => {
-            handleRequestError(error);
         });
     }
 
-    loadCategories();
+    function getProduct(productId) {
+        return new Promise((resolve, reject) => {
+            makeAuthenticatedRequest({
+                method: 'GET',
+                url: `${API_URL}/product/${productId}`
+            }).then(response => {
+                const product = response.data.data;
+                if (product) {
+                    resolve(product);
+                }
+            }).catch(error => {
+                showNotFound();
+                reject(error);
+            });
+        });
+    }
+
+    function initializeProductForm(product) {
+        $('#name').val(product.name);
+        $('#description').val(product.description);
+        $('#price').val(product.price);
+        $('#stock').val(product.stock);
+        $('#category').val(product.category.id);
+        $('#image-preview').attr('src', product.image);
+    }
 
     function getQueryParam(param) {
         const urlParams = new URLSearchParams(window.location.search);
@@ -28,24 +57,20 @@ $(document).ready(function () {
     if (productId) {
         $('#product-title-form').text('Actualizar Producto');
 
-        makeAuthenticatedRequest({
-            method: 'GET',
-            url: `${API_URL}/product/${productId}`
-        }).then(response => {
-            const product = response.data.data;
-            if (product) {
-                $('#name').val(product.name);
-                $('#description').val(product.description);
-                $('#price').val(product.price);
-                $('#stock').val(product.stock);
-                $('#category').val(product.category.id);
-                $('#image-preview').attr('src', product.image);
-            } else {
-                showNotFound();
-            }
+
+        loadCategories().then(() => {
+            return getProduct(productId);
+        }).then(product => {
+            initializeProductForm(product);
         }).catch(error => {
-            handleRequestError(error);
+            Swal.fire({
+                icon: 'error',
+                title: 'General',
+                text: 'Error al carga el producto o categoría.'
+            });
         });
+    } else {
+        loadCategories();
     }
 
     $('#image').on('change', function () {
@@ -193,7 +218,7 @@ $(document).ready(function () {
             title: 'Producto no encontrado',
             text: 'El producto especifico no existe.'
         }).then(() => {
-            // window.location.href = '/pages/prodduct-list.html';
+            window.location.href = '/admin/product-list.html';
         });
     }
 

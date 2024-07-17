@@ -17,21 +17,19 @@
 <body>
     <div id="loading-indicator">Cargando...</div>
     <div id="header-admin"></div>
-    <h1 class="text-center mt-5" id="product-title-form">Crear Producto</h1>
+    <h1 class="text-center mt-5" id="category-title-form">Actualizar Inventario</h1>
     <div class="card">
         <div class="card-body text-center d-flex flex-column align-items-center">
             <form id="product-form" method="post" data-bs-theme="light">
-                <div class="mb-3"><img id="image-preview" class="mb-4 object-fit-cover" width="100" height="80"
-                        loading="lazy"><input class="form-control" type="file" id="image" name="image"></div>
-                <div class="mb-3"><input class="form-control" type="text" id="name" placeholder="nombre" name="name">
+                <div class="mb-3"><input class="form-control" type="text" id="name" name="name" placeholder="nombre"
+                        disabled>
                 </div>
-                <div class="mb-3"><textarea class="form-control" id="description" placeholder="descripción"
-                        name="description"></textarea></div>
-                <div class="mb-3"><input class="form-control" type="number" id="price" name="price"
-                        placeholder="precio"></div>
-                <div class="mb-3"><select class="form-select" id="category" name="category">
-                        <option value="" selected="">Seleccione una opción</option>
-                    </select></div>
+                <div class="mb-3" id="stock">
+                    Stock :
+                </div>
+                <div class="mb-3"><input class="form-control" type="number" id="stockupdate" name="stockupdate"
+                        placeholder="stock"></textarea>
+                </div>
                 <div class="mb-3"><button class="btn btn-primary shadow d-block w-100" type="submit">Guardar</button>
                 </div>
             </form>
@@ -48,7 +46,7 @@
     <script src="../assets/js/lib/jwt-decode.min.js"></script>
     <script src="../assets/js/common/auth.js"></script>
     <script src="../assets/js/common/format.js"></script>
-    <script src="../assets/js/pages/admin/product-persistence.js"></script>
+    <script src="../assets/js/pages/admin/stock-persistence.js"></script>
 </body>
 
 </html>

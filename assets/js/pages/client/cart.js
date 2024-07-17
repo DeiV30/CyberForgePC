@@ -1,4 +1,28 @@
-$(window).on('load', function () {
+$(document).ready(function () {
+
+    const targetNode = document.body;
+    const config = { childList: true, subtree: true };
+
+    const callback = function (mutationsList, observer) {
+        for (const mutation of mutationsList) {
+            if (mutation.type === 'childList') {
+                if ($('#cart-badge').length > 0) {
+                    updateCartBadge();
+                    observer.disconnect();
+                }
+            }
+        }
+    };
+
+    const observer = new MutationObserver(callback);
+    observer.observe(targetNode, config);
+
+    function updateCartBadge() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+        $('#cart-badge').text(totalItems);
+    }
+
     function addToCart(product) {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
         const existingProduct = cart.find(item => item.id === product.id);
@@ -19,15 +43,8 @@ $(window).on('load', function () {
         updateCartBadge();
     }
 
-    function updateCartBadge() {
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-        $('#cart-badge').text(totalItems);
-    }
 
-    updateCartBadge();
-
-    $('.add-to-cart').on('click', function () {
+    $('.container-cart').on('click', '.add-to-cart', function () {
         const productId = $(this).data('id');
         makeAnonymousRequest({
             method: 'GET',
@@ -52,8 +69,7 @@ $(window).on('load', function () {
         });
     });
 
-
-    $('.wishList-add').on('click', function () {
+    $('.container-cart').on('click', '.wishList-add', function () {
         const userId = localStorage.getItem('userId');
 
         if (!userId) {

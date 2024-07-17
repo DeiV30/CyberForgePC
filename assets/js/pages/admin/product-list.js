@@ -34,7 +34,7 @@ $(document).ready(function () {
 
             const productCard = `
                 <div class="col mb-4">                    
-                    <div class="position-relative overflow-hidden">
+                    <div class="position-relative overflow-hidden rounded">
                     <img class="rounded img-fluid shadow w-100 fit-cover" src="${item.image}" style="height: 250px;">
                      ${ribbon}
                     </div>
