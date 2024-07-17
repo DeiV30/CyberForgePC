@@ -6,9 +6,6 @@
 
     public interface IInventoryTransactions
     {
-        Task<List<CategoryResponse>> GetAll();
-        Task<CategoryResponse> GetById(string id);
-        Task<bool> Create(CategoryRequest request);
-        Task<bool> Update(string id, CategoryUpdateRequest request);
+        Task<List<InventoryTransactionResponse>> GetById(string id);
     }
 }

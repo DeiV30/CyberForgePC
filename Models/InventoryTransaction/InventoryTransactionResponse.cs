@@ -5,8 +5,9 @@ namespace  cyberforgepc.Models.Category
     public class InventoryTransactionResponse
     {
         public string Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }        
+        public string ProductName { get; set; }
+        public string TransactionType { get; set; }
+        public int Quantity { get; set; }
         public DateTime Created { get; set; }
     }
 
