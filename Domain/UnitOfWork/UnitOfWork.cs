@@ -18,6 +18,7 @@ namespace  cyberforgepc.Domain.UnitOfWork
         public IRepository<Coupon> Coupon { get; set; }
         public IRepository<WishList> WishList { get; set; }
         public IRepository<Order> Order { get; set; }
+        public IRepository<OrderItem> OrderItem { get; set; }
         public IRepository<InventoryTransaction> InventoryTransaction { get; set; }
 
         #endregion

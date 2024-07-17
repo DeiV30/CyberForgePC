@@ -12,8 +12,8 @@
         public CouponResponse Coupon { get; set; }
         public UserResponse User { get; set; }
         public List<ProductResponse> Products { get; set; }
-        public double? SubTotal { get; set; }
         public double? Total { get; set; }
+        public double SubTotal { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
     }

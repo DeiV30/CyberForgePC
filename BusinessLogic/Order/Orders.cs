@@ -99,13 +99,30 @@
             {
                 Id = Guid.NewGuid().ToString(),
                 UserId = request.UserId,
-                CouponId = request.CouponId,
+                CouponId = (String.IsNullOrEmpty(request.CouponId)) ? null : request.CouponId,
                 SubTotal = request.SubTotal,
                 Total = request.Total,
-                Created = DateTime.Now,
+                State = "Pendiente",
+                Created = DateTime.Now
             };
 
+            var products = new List<OrderItem>();
+            request.OrderItems.ToList().ForEach(p =>
+            {
+                products.Add(new OrderItem
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    OrderId = orderCreate.Id,
+                    ProductId = p.ProductId,
+                    Quantity = p.Quantity,
+                    Price = p.Price,
+                    Created = DateTime.Now
+                });
+            });
+
             unitOfWork.Order.Add(orderCreate);
+            unitOfWork.OrderItem.Add(products);
+
             await unitOfWork.Save();
 
             return true;

@@ -152,6 +152,7 @@
             containerBuilder.RegisterType<WishLists>().As<IWishLists>();
             containerBuilder.RegisterType<Categories>().As<ICategories>();
             containerBuilder.RegisterType<Orders>().As<IOrders>();
+
             containerBuilder.RegisterType<InventoryTransactions>().As<IInventoryTransactions>();
 
             containerBuilder.RegisterType<UnitOfWork>().As<IUnitOfWork>().PropertiesAutowired();
