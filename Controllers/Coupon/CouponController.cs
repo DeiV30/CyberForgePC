@@ -1,22 +1,18 @@
-﻿using System.IO;
-
-namespace cyberforgepc.Controllers.Coupon
+﻿namespace cyberforgepc.Controllers.Coupon
 {
     using cyberforgepc.BusinessLogic;
     using cyberforgepc.Helpers.Common;
     using cyberforgepc.Helpers.Exceptions;
     using cyberforgepc.Helpers.Middleware;
-    using cyberforgepc.Models.Category;
     using cyberforgepc.Models.Coupon;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System;
-    using System.Data;
     using System.Threading.Tasks;
 
     [ApiController]
     [Route("api/[controller]")]
-    [Produces("application/json")]    
+    [Produces("application/json")]
     public class CouponController : ControllerBase
     {
         private readonly ICoupons couponManager;

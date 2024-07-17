@@ -173,14 +173,6 @@ namespace cyberforgepc.BusinessLogic
 
             await unitOfWork.Save();
 
-            //var data = new Dictionary<string, object> {
-            //        { "Id", userToCreate.Id },
-            //        { "Name", userToCreate.Name },
-            //        { "ActiveToken", userToCreate.ActiveToken },
-            //    };
-
-            //emailServices.PostmarkAsync(postmarkSettings.Template.Activate, userToCreate.Email, data).Wait();
-
             return true;
         }
 

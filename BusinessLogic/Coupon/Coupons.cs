@@ -3,7 +3,6 @@
     using cyberforgepc.Database.Models;
     using cyberforgepc.Domain.UnitOfWork;
     using cyberforgepc.Helpers.Exceptions;
-    using cyberforgepc.Models.Category;
     using cyberforgepc.Models.Coupon;
     using System;
     using System.Collections.Generic;

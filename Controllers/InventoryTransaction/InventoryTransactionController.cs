@@ -1,14 +1,11 @@
-namespace cyberforgepc.Controllers.Product
+namespace cyberforgepc.Controllers.InventoryTransaction
 {
     using cyberforgepc.BusinessLogic;
     using cyberforgepc.Helpers.Common;
     using cyberforgepc.Helpers.Exceptions;
-    using cyberforgepc.Helpers.Middleware;
-    using cyberforgepc.Models.Product;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     [ApiController]
