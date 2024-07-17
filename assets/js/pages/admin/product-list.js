@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    makeAnonymousRequest({
+    makeAuthenticatedRequest({
         method: 'GET',
         url: `${API_URL}/product`
     }).then(response => {

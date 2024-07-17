@@ -48,6 +48,34 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="stockItemsModal" tabindex="-1" aria-labelledby="stockItemsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="stockItemsModalLabel">Detalle de la orden</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Transacción</th>
+                                <th>Cantidad</th>
+                                <th>Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stockItemsList">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="../assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="../assets/js/lib/jquery-3.6.0.min.js"></script>
     <script src="../assets/js/pages/main-admin.js"></script>

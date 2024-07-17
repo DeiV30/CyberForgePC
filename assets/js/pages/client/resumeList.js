@@ -67,10 +67,4 @@ $(document).ready(function () {
         });
     }
 
-    // <th>Id</th>
-    // <th>Nombre</th>
-    // <th>Categoría</th>
-    // <th>Cantidad</th>
-    // <th>Precio</th>
-
 });
