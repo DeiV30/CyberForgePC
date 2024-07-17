@@ -5,8 +5,10 @@ namespace cyberforgepc.BusinessLogic
     using cyberforgepc.Helpers.Exceptions;
     using cyberforgepc.Models.Category;
     using cyberforgepc.Models.Product;
+    using Microsoft.Data.SqlClient;
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -19,6 +21,36 @@ namespace cyberforgepc.BusinessLogic
         public async Task<List<ProductResponse>> GetAll()
         {
             var product = await unitOfWork.Product.GetAll(x => x.Category);
+
+            var productResponse = new List<ProductResponse>();
+
+            product.ToList().ForEach(p =>
+            {
+                productResponse.Add(new ProductResponse
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Category = new CategoryResponse
+                    {
+                        Id = p.Category.Id,
+                        Name = p.Category.Name
+                    },
+                    Image = p.Image,
+                    DeleteKey = p.DeleteKey,
+                    Description = p.Description,
+                    Price = p.Price,
+                    Stock = p.Stock,
+                    Created = p.Created,
+                    Updated = p.Updated
+                });
+            });
+
+            return productResponse;
+        }
+
+        public async Task<List<ProductResponse>> GetAllPublic()
+        {
+            var product = await unitOfWork.Product.GetWhere(x => x.Stock != 0, c => c.Category);
 
             var productResponse = new List<ProductResponse>();
 
@@ -65,8 +97,8 @@ namespace cyberforgepc.BusinessLogic
                 Description = product.Description,
                 Stock = product.Stock,
                 DeleteKey = product.DeleteKey,
-                Image  = product.Image,
-                Price = product.Price,  
+                Image = product.Image,
+                Price = product.Price,
                 Created = product.Created,
                 Updated = product.Updated
             };
@@ -76,16 +108,17 @@ namespace cyberforgepc.BusinessLogic
 
         public async Task<bool> Create(ProductRequest requests)
         {
+            requests.Image ??= "https://ssrsreportfiles.blob.core.windows.net/images/default.png";
+
             var list = new Product()
             {
-
                 Id = Guid.NewGuid().ToString(),
                 Name = requests.Name,
                 Description = requests.Description,
                 CategoryId = requests.CategoryId,
                 Price = requests.Price,
                 Image = requests.Image,
-                Stock = requests.Stock,
+                Stock = 0,
                 Created = DateTime.Now
             };
 
@@ -107,11 +140,25 @@ namespace cyberforgepc.BusinessLogic
             productToUpdate.CategoryId = request.CategoryId;
             productToUpdate.Price = request.Price;
             productToUpdate.Image = request.Image;
-            productToUpdate.Stock = request.Stock;
             productToUpdate.Updated = DateTime.Now;
 
             unitOfWork.Product.Update(productToUpdate);
             await unitOfWork.Save();
+
+            return true;
+        }
+
+        public async Task<bool> UpdateStock(string id, ProductUpdateStockRequest request)
+        {
+            var productToUpdate = await unitOfWork.Product.FindWhere(p => p.Id.Equals(id));
+
+            if (productToUpdate == null)
+                throw new MessageException("No se han encontrado resultados.");
+
+            var productIdParam = new SqlParameter("@ProductId", SqlDbType.VarChar) { Value = id };
+            var quantityParam = new SqlParameter("@Quantity", SqlDbType.Int) { Value = request.Quantity };
+
+            await unitOfWork.Product.ExecuteStoredProcedureAsync("AddProductStock", productIdParam, quantityParam);
 
             return true;
         }
@@ -123,7 +170,7 @@ namespace cyberforgepc.BusinessLogic
             if (product == null)
                 throw new MessageException("No se han encontrado resultados.");
 
-            product.Id = Guid.NewGuid().ToString();
+            product.DeleteKey = Guid.NewGuid().ToString();
             product.Updated = DateTime.Now;
 
             unitOfWork.Product.Update(product);

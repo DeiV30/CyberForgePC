@@ -15,9 +15,13 @@ namespace  cyberforgepc.Models.Product
         public string CategoryId { get; set; }        
         public string Image { get; set; }
         [Required]
-        public long Stock { get; set; }
-        [Required]
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
+    }
+
+    public class ProductUpdateStockRequest
+    {
+        [Required]
+        public long Quantity { get; set; }
     }
 }

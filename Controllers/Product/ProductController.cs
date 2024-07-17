@@ -22,7 +22,7 @@ namespace cyberforgepc.Controllers.Product
 
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Roles = Role.Admin)]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -31,6 +31,25 @@ namespace cyberforgepc.Controllers.Product
             try
             {
                 var result = await productManager.GetAll();
+                return Ok(new { data = result });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+
+        [HttpGet("public")]
+        [AllowAnonymous]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetAll()
+        {
+            try
+            {
+                var result = await productManager.GetAllPublic();
                 return Ok(new { data = result });
             }
             catch (Exception ex)
@@ -94,6 +113,29 @@ namespace cyberforgepc.Controllers.Product
             try
             {
                 await productManager.Update(id, request);
+                return Ok(new { data = true });
+            }
+            catch (MessageException ex)
+            {
+                return NotFound(new { code = ex.ExceptionCode, message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        [HttpPut("{id}/stock")]
+        [ValidationModel]
+        [Authorize(Roles = Role.Admin)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UpdateStock(string id, [FromBody] ProductUpdateStockRequest request)
+        {
+            try
+            {
+                await productManager.UpdateStock(id, request);
                 return Ok(new { data = true });
             }
             catch (MessageException ex)

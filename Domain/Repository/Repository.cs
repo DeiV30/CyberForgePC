@@ -1,6 +1,7 @@
-﻿namespace  cyberforgepc.Domain.Repository
+﻿namespace cyberforgepc.Domain.Repository
 {
     using cyberforgepc.Database.Context;
+    using Microsoft.Data.SqlClient;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
     using System;
@@ -54,7 +55,7 @@
         }
 
         public async Task<IEnumerable<T>> GetAll(params Expression<Func<T, object>>[] includes)
-        {       
+        {
             IQueryable<T> query = dbSet;
 
             if (includes.Length != 0)
@@ -84,5 +85,14 @@
         }
 
         public Task<int> CountWhere(Expression<Func<T, bool>> predicate) => dbSet.CountAsync(predicate);
+
+        public async Task ExecuteStoredProcedureAsync(string procedureName, params SqlParameter[] parameters)
+        {
+            var sqlParameters = parameters ?? Array.Empty<SqlParameter>();
+            var parameterNames = string.Join(", ", sqlParameters.Select(p => p.ParameterName));
+
+            var sqlCommand = $"EXEC {procedureName} {parameterNames}";
+            await Context.Database.ExecuteSqlRawAsync(sqlCommand, sqlParameters);
+        }
     }
 }

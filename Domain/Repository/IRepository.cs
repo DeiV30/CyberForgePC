@@ -1,5 +1,6 @@
 ﻿namespace  cyberforgepc.Domain.Repository
 {
+    using Microsoft.Data.SqlClient;
     using System;
     using System.Collections.Generic;
     using System.Linq.Expressions;
@@ -16,5 +17,6 @@
         Task<IEnumerable<T>> GetAll(params Expression<Func<T, object>>[] includes);
         Task<IEnumerable<T>> GetWhere(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
         Task<int> CountWhere(Expression<Func<T, bool>> predicate);
+        Task ExecuteStoredProcedureAsync(string procedureName, params SqlParameter[] parameters);
     }
 }
