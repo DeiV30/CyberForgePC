@@ -36,59 +36,59 @@
                     Code = x.Coupon.Code,
                     Discount = x.Coupon.Discount,
                 },
-                Products = new List<ProductResponse>
-                {
-                    //new ProductResponse
-                    //{
-                    //    Id = x.Product.Id,
-                    //    Name = x.Product.Name,
-                    //    Description = x.Product.Description,
-                    //    Price = x.Product.Price,
-                    //    Image = x.Product.Image,
-                    //}
-                },
                 SubTotal = x.SubTotal,
                 Total = x.Total,
                 Created = x.Created,
             }).ToList();
         }
 
-        public async Task<OrderResponse> GetById(string id)
+        public async Task<List<OrderResponse>> GetByIdList(string id)
         {
-            var order = await unitOfWork.Order.FindWhere(x => x.Id.Equals(id), y => y.OrderItems, z => z.User, w => w.Coupon);
+            var orders = await unitOfWork.Order.GetWhere(x => x.UserId.Equals(id), y => y.OrderItems, w => w.Coupon);
 
-            if (order == null)
+            if (orders == null)
                 throw new MessageException("No se han encontrado resultados.");
 
-            var response = new OrderResponse
+            var orderResponses = new List<OrderResponse>();
+
+            orders.ToList().ForEach(order =>
             {
-                User = new UserResponse
+                orderResponses.Add(new OrderResponse
                 {
-                    Id = order.User.Id,
-                    Name = order.User.Name,
-                    Email = order.User.Email,
-                },
-                Coupon = new CouponResponse
+                    Id = order.Id,
+                    Coupon = new CouponResponse()
+                    {
+                        Discount = order.Coupon?.Discount ?? 0,
+                    },
+                    Total = order.Total,
+                    SubTotal = order.SubTotal,
+                });
+            });
+
+            return orderResponses;
+        }
+
+        public async Task<List<OrderItemResponse>> GetByIdOrderList(string id)
+        {
+            var orders = await unitOfWork.OrderItem.GetWhere(x => x.OrderId.Equals(id), y => y.Product.Category);
+
+            if (orders == null)
+                throw new MessageException("No se han encontrado resultados.");
+
+           
+            var response = new List<OrderItemResponse>();
+
+            orders.ToList().ForEach(order =>
+            {
+                response.Add(new OrderItemResponse
                 {
-                    Id = order.Coupon.Id,
-                    Code = order.Coupon.Code,
-                    Discount = order.Coupon.Discount,
-                },
-                Products = new List<ProductResponse>
-                {
-                    //new ProductResponse
-                    //{
-                    //    Id = order.Product.Id,
-                    //    Name = order.Product.Name,
-                    //    Description = order.Product.Description,
-                    //    Price = order.Product.Price,
-                    //    Image = order.Product.Image,
-                    //}
-                },
-                SubTotal = order.SubTotal,
-                Total = order.Total,
-                Created = order.Created,
-            };
+                    Quantity = order.Quantity,
+                    Price = order.Price,
+                    ProductName = order.Product.Name,
+                    ProductCategory = order.Product.Category.Name,
+                });
+               
+            });
 
             return response;
         }

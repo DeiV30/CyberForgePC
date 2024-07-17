@@ -1,4 +1,4 @@
-﻿namespace  cyberforgepc.Models.Order
+﻿namespace cyberforgepc.Models.Order
 {
     using cyberforgepc.Models.Coupon;
     using cyberforgepc.Models.Product;
@@ -11,10 +11,18 @@
         public string Id { get; set; }
         public CouponResponse Coupon { get; set; }
         public UserResponse User { get; set; }
-        public List<ProductResponse> Products { get; set; }
         public double? Total { get; set; }
         public double SubTotal { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
+    }
+
+    public class OrderItemResponse
+    {
+        public int Quantity { get; set; }
+        public double Price { get; set; }
+        public string ProductName { get; set; }
+        public string ProductCategory { get; set; }
+
     }
 }

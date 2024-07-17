@@ -21,7 +21,7 @@
 
 
         [HttpGet("{id}")]
-        [AuthorizeMultiple(Role.Admin, Role.Client)]
+        [Authorize(Roles = Role.Client)]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -29,7 +29,29 @@
         {
             try
             {
-                var result = await orderManager.GetById(id);
+                var result = await orderManager.GetByIdList(id);
+                return Ok(new { data = result });
+            }
+            catch (MessageException ex)
+            {
+                return NotFound(new { code = ex.ExceptionCode, message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("{id}/orderitem")]
+        [Authorize(Roles = Role.Client)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetByIdOrderList(string id)
+        {
+            try
+            {
+                var result = await orderManager.GetByIdOrderList(id);
                 return Ok(new { data = result });
             }
             catch (MessageException ex)
